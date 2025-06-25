@@ -80,8 +80,7 @@ fun PedidoItem(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Última oração: ${it.format(dateFormatter)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
 

@@ -3,6 +3,7 @@ package com.example.pedidosdeoracao.ui.feature.list
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -15,7 +16,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,6 +56,7 @@ fun ListScreen(
     }
 
     val pedidos = viewModel.pedidosComUltimaOracao.collectAsState()
+    val showPedidosOradosHoje = viewModel.mostrarPedidosOradosHoje.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -74,6 +78,7 @@ fun ListScreen(
 
     ListContent(
         pedidos = pedidos.value,
+        showPedidosOradosHoje = showPedidosOradosHoje.value,
         onEvent = viewModel::onEvent
     )
 }
@@ -82,6 +87,7 @@ fun ListScreen(
 @Composable
 fun ListContent(
     pedidos: List<PedidoComUltimaOracao>,
+    showPedidosOradosHoje: Boolean,
     onEvent: (event: ListEvent) -> Unit,
 ) {
     Scaffold(
@@ -95,7 +101,7 @@ fun ListContent(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding()) // topo do Scaffold
+                .padding(top = paddingValues.calculateTopPadding()) // Topo do Scaffold
                 .fillMaxSize()
         ) {
             Text(
@@ -103,6 +109,24 @@ fun ListContent(
                 text = "Pedidos de Oração",
                 style = MaterialTheme.typography.titleLarge
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row {
+                TextButton(onClick = {
+                    onEvent(ListEvent.ToggleShowPedidosOradosHoje)
+                }) {
+                    Text(text = if (showPedidosOradosHoje) "Esconder pedidos orados hoje" else "Mostrar pedidos orados hoje")
+                }
+
+                Switch(
+                    checked = showPedidosOradosHoje,
+                    onCheckedChange = {
+                        onEvent(ListEvent.ToggleShowPedidosOradosHoje)
+                    }
+                )
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp)
@@ -113,7 +137,6 @@ fun ListContent(
                         ultimaOracao = item.ultimaOracao,
                         onPrayClick = {
                             onEvent(ListEvent.Pray(item.pedido.id))
-                            //onEvent(ListEvent.ArchiveChanged(pedido.id, it))
                         },
                         onItemClick = {
                             onEvent(ListEvent.AddEdit(item.pedido.id))

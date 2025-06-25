@@ -2,6 +2,7 @@ package com.example.pedidosdeoracao.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "pedidos")
 data class PedidoEntity(
@@ -9,6 +10,5 @@ data class PedidoEntity(
     val title: String,
     val description: String?,
     val isArchived: Boolean,
-    //val creationDate: Long,
-    //val lastPrayedDate: Long?
+    val creationDate: LocalDateTime
 )

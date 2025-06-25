@@ -3,6 +3,7 @@ package com.example.pedidosdeoracao.data
 import com.example.pedidosdeoracao.domain.Pedido
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 
 class PedidoRepositoryImpl(
     private val dao: PedidoDao
@@ -16,6 +17,7 @@ class PedidoRepositoryImpl(
             } ?: PedidoEntity(
                 title = title,
                 description = description,
+                creationDate = LocalDateTime.now(),
                 isArchived = false
             )
 
@@ -56,6 +58,7 @@ class PedidoRepositoryImpl(
             id = id,
             title = title,
             description = description,
+            creationDate = creationDate,
             isArchived = isArchived)
     }
 }
