@@ -22,6 +22,7 @@ data class DetailsRoute(val id: Long)
 @Composable
 fun PedidoNavHost() {
     val navController = rememberNavController()
+
     NavHost(navController = navController, startDestination = ListRoute) {
         composable<ListRoute> {
             ListScreen(

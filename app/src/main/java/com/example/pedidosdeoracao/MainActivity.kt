@@ -21,13 +21,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Box(
-                modifier = Modifier.safeDrawingPadding()
-            ){
+            //Box(
+            //    modifier = Modifier.safeDrawingPadding()
+            //){
                 PedidosDeOracaoTheme {
                     PedidoNavHost()
                 }
-            }
+            //}
         }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -98,9 +99,23 @@ fun AddEditContent(
     ) {
         Column(
             modifier = Modifier
-                .consumeWindowInsets(it)
+                .padding(top = it.calculateTopPadding())
                 .padding(16.dp)
         ) {
+            if (title.isBlank()) {
+                Text(
+                    text = "Adicionar Pedido de Oração",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            } else {
+                Text(
+                    text = "Editar Pedido de Oração",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = title,

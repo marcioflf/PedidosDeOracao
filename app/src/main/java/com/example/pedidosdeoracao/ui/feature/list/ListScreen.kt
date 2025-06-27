@@ -160,18 +160,19 @@ fun ListContent(
     }
 }
 
-/*
+
 @Preview
 @Composable
 private fun ListContentPreview() {
     PedidosDeOracaoTheme {
         ListContent(
             pedidos = listOf(
-                pedido1,
-                pedido2
+                pedidoComUltimaOracao1,
+                pedidoComUltimaOracao2,
+                pedidoComUltimaOracao3
             ),
+            showPedidosOradosHoje = false,
             onEvent = {}
         )
     }
 }
-*/
