@@ -35,6 +35,9 @@ class DetailsViewModel(
                 initialValue = emptyList()
             )
 
+    private val _showDeleteDialog = MutableStateFlow(false)
+    val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog
+
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
@@ -48,13 +51,16 @@ class DetailsViewModel(
         when(event) {
             DetailsEvent.Pray -> pray()
             DetailsEvent.Edit -> edit()
-            DetailsEvent.Delete -> delete()
+            DetailsEvent.Delete -> _showDeleteDialog.value = true
+            DetailsEvent.ConfirmDelete -> delete()
+            DetailsEvent.CancelDelete -> _showDeleteDialog.value = false
         }
     }
 
     private fun pray() {
         viewModelScope.launch {
             oracaoRepository.insert(pedidoId)
+            _uiEvent.send(UiEvent.ShowSnackbar("Oração registrada com sucesso"))
         }
     }
 
@@ -67,8 +73,7 @@ class DetailsViewModel(
     private fun delete() {
         viewModelScope.launch {
             pedidoRepository.delete(pedidoId)
-            _uiEvent.send(UiEvent.NavigateBack)
-            _uiEvent.send(UiEvent.ShowSnackbar("Pedido deletado"))
+            _uiEvent.send(UiEvent.NavigateBackWithMessage("Pedido excluído com sucesso"))
         }
     }
 

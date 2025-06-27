@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -116,6 +115,7 @@ class ListViewModel(
     private fun pray(id: Long) {
         viewModelScope.launch {
             oracaoRepository.insert(id)
+            _uiEvent.send(ShowSnackbar("Oração registrada com sucesso"))
         }
     }
 }

@@ -16,6 +16,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -42,6 +44,7 @@ import com.example.pedidosdeoracao.ui.theme.PedidosDeOracaoTheme
 
 @Composable
 fun ListScreen(
+    snackbarHostState: SnackbarHostState,
     navigateToAddEditScreen: (id: Long?) -> Unit,
     navigateToDetailsScreen: (id: Long) -> Unit
 ) {
@@ -64,8 +67,10 @@ fun ListScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                is UiEvent.ShowSnackbar -> {}
-                UiEvent.NavigateBack -> {}
+                is UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(message = uiEvent.message)
+                }
+                is UiEvent.NavigateBack -> {}
 
                 is UiEvent.Navigate<*> -> {
                     when(uiEvent.route) {
@@ -78,6 +83,7 @@ fun ListScreen(
                         else -> {}
                     }
                 }
+                is UiEvent.NavigateBackWithMessage -> {}
             }
         }
     }
@@ -86,6 +92,7 @@ fun ListScreen(
         pedidos = pedidos.value,
         showPedidosOradosHoje = showPedidosOradosHoje.value,
         compactMode = compactMode.value,
+        snackbarHostState = snackbarHostState,
         onEvent = viewModel::onEvent
     )
 }
@@ -96,6 +103,7 @@ fun ListContent(
     pedidos: List<PedidoComUltimaOracao>,
     showPedidosOradosHoje: Boolean,
     compactMode: Boolean,
+    snackbarHostState: SnackbarHostState,
     onEvent: (event: ListEvent) -> Unit,
 ) {
     Scaffold(
@@ -105,6 +113,9 @@ fun ListContent(
             }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Column(
@@ -148,6 +159,8 @@ fun ListContent(
                 )
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -189,6 +202,7 @@ private fun ListContentPreview() {
             ),
             showPedidosOradosHoje = false,
             compactMode = false,
+            snackbarHostState = SnackbarHostState(),
             onEvent = {}
         )
     }

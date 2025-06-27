@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,8 +49,10 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DetailsScreen(
     id: Long,
+    snackbarHostState: SnackbarHostState,
     navigateBack: () -> Unit,
-    navigateToAddEditScreen: (id: Long?) -> Unit
+    navigateToAddEditScreen: (id: Long?) -> Unit,
+    navigateBackWithMessage: (message: String) -> Unit
 ) {
     val context = LocalContext.current.applicationContext
     val database = PedidoDatabaseProvider.provide(context)
@@ -63,9 +67,9 @@ fun DetailsScreen(
         )
     }
 
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
+    //val snackbarHostState = remember {
+    //    SnackbarHostState()
+    //}
 
     val pedidoState = viewModel.pedido.collectAsState()
     val oracoes = viewModel.oracoes.collectAsState()
@@ -84,6 +88,8 @@ fun DetailsScreen(
 
     val oracoesOrdenadas = oracoes.value.sortedByDescending { it.dataHora }
 
+    val showDeleteDialog = viewModel.showDeleteDialog.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.refreshPedido()
         viewModel.uiEvent.collect { uiEvent ->
@@ -91,7 +97,7 @@ fun DetailsScreen(
                 is UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = uiEvent.message)
                 }
-                UiEvent.NavigateBack -> {
+                is UiEvent.NavigateBack -> {
                     navigateBack()
                 }
                 is UiEvent.Navigate<*> -> {
@@ -101,6 +107,9 @@ fun DetailsScreen(
                         }
                         else -> {}
                     }
+                }
+                is UiEvent.NavigateBackWithMessage -> {
+                    navigateBackWithMessage(uiEvent.message)
                 }
             }
         }
@@ -112,6 +121,25 @@ fun DetailsScreen(
         snackbarHostState = snackbarHostState,
         onEvent = viewModel::onEvent
     )
+
+    // AlertDialog de confirmação de exclusão
+    if (showDeleteDialog.value) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onEvent(DetailsEvent.CancelDelete) },
+            title = { Text("Excluir pedido?") },
+            text = { Text("Tem certeza que deseja excluir este pedido? Essa ação não pode ser desfeita.") },
+            confirmButton = {
+                TextButton(onClick = { viewModel.onEvent(DetailsEvent.ConfirmDelete) }) {
+                    Text("Excluir")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.onEvent(DetailsEvent.CancelDelete) }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
 }
 
 @Composable

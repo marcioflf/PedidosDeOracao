@@ -32,7 +32,8 @@ import com.example.pedidosdeoracao.ui.theme.PedidosDeOracaoTheme
 @Composable
 fun AddEditScreen(
     id: Long?,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateBackWithMessage: (message: String) -> Unit
 ) {
     val context = LocalContext.current.applicationContext
     val database = PedidoDatabaseProvider.provide(context)
@@ -63,6 +64,9 @@ fun AddEditScreen(
                 }
                 is UiEvent.Navigate<*> -> {
 
+                }
+                is UiEvent.NavigateBackWithMessage -> {
+                    navigateBackWithMessage(uiEvent.message)
                 }
             }
         }

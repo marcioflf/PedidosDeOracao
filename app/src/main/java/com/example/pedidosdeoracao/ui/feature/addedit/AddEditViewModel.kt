@@ -57,7 +57,12 @@ class AddEditViewModel(
             }
 
             repository.insert(title, description, id)
-            _uiEvent.send(UiEvent.NavigateBack)
+
+            if (id == null) {
+                _uiEvent.send(UiEvent.NavigateBackWithMessage("Pedido adicionado com sucesso"))
+            } else {
+                _uiEvent.send(UiEvent.NavigateBackWithMessage("Pedido editado com sucesso"))
+            }
         }
     }
 }
