@@ -32,6 +32,13 @@ class ListViewModel(
         _mostrarPedidosOradosHoje.update { !it }
     }
 
+    private val _compactMode = MutableStateFlow(false)
+    val compactMode: StateFlow<Boolean> = _compactMode
+
+    fun toggleCompactMode() {
+        _compactMode.update { !it }
+    }
+
     val pedidosComUltimaOracao = combine(
         pedidoRepository.getAll(),
         oracaoRepository.listarUltimasOracoes(),
@@ -48,7 +55,6 @@ class ListViewModel(
             .filter {
             if (mostrarPedidosOradosHoje) true
             else it.ultimaOracao?.toLocalDate() != LocalDate.now()
-
         }
 
     }.stateIn(
@@ -86,6 +92,10 @@ class ListViewModel(
                 viewModelScope.launch {
                     _uiEvent.send(Navigate(DetailsRoute(event.id)))
                 }
+            }
+
+            is ListEvent.ToggleCompactMode -> {
+                toggleCompactMode()
             }
         }
     }

@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter
 fun PedidoItem(
     pedido: Pedido,
     ultimaOracao: LocalDateTime?,
+    compactMode: Boolean = false,
     onPrayClick: () -> Unit,
     onItemClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -55,8 +56,6 @@ fun PedidoItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            //Checkbox(checked = pedido.isArchived, onCheckedChange = onArchivedChange)
-
             IconButton(onClick = onPrayClick) {
                 Icon(
                     painter = painterResource(id = R.drawable.pray),
@@ -75,32 +74,24 @@ fun PedidoItem(
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                ultimaOracao?.let {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Última oração: ${it.format(dateFormatter)}",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                if(!compactMode) {
+                    ultimaOracao?.let {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Última oração: ${it.format(dateFormatter)}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+
+                    pedido.description?.let {
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(
+                            text = pedido.description,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
-
-                pedido.description?.let {
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(
-                        text = pedido.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            IconButton(onClick = onDeleteClick) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete"
-                )
             }
         }
     }
@@ -112,7 +103,13 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 @Composable
 private fun PedidoItemPreview() {
     PedidosDeOracaoTheme {
-        PedidoItem(pedido = pedido1,
+        PedidoItem(pedido = Pedido(
+            id = 1,
+            title = "Pedido 1",
+            description = "Descrição do pedidooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo 1",
+            creationDate = LocalDateTime.now(),
+            isArchived = false
+        ),
             ultimaOracao = LocalDateTime.now(),
             onPrayClick = {},
             onItemClick = {},
@@ -123,10 +120,43 @@ private fun PedidoItemPreview() {
 
 @Preview
 @Composable
-private fun PedidoItemArchivedPreview() {
+private fun PedidoItemNeverPrayedPreview() {
     PedidosDeOracaoTheme {
         PedidoItem(pedido = pedido2,
-            ultimaOracao = LocalDateTime.now(),
+            ultimaOracao = null,
+            onPrayClick = {},
+            onItemClick = {},
+            onDeleteClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PedidoItemOnlyTitlePreview() {
+    PedidosDeOracaoTheme {
+        PedidoItem(pedido = Pedido(
+            id = 1,
+            title = "Pedido 1",
+            description = null,
+            creationDate = LocalDateTime.now(),
+            isArchived = false
+        ),
+            ultimaOracao = null,
+            onPrayClick = {},
+            onItemClick = {},
+            onDeleteClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PedidoItemCompactModePreview() {
+    PedidosDeOracaoTheme {
+        PedidoItem(pedido = pedido2,
+            ultimaOracao = null,
+            compactMode = true,
             onPrayClick = {},
             onItemClick = {},
             onDeleteClick = {}

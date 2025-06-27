@@ -59,6 +59,7 @@ fun ListScreen(
 
     val pedidos = viewModel.pedidosComUltimaOracao.collectAsState()
     val showPedidosOradosHoje = viewModel.mostrarPedidosOradosHoje.collectAsState()
+    val compactMode = viewModel.compactMode.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -84,6 +85,7 @@ fun ListScreen(
     ListContent(
         pedidos = pedidos.value,
         showPedidosOradosHoje = showPedidosOradosHoje.value,
+        compactMode = compactMode.value,
         onEvent = viewModel::onEvent
     )
 }
@@ -93,6 +95,7 @@ fun ListScreen(
 fun ListContent(
     pedidos: List<PedidoComUltimaOracao>,
     showPedidosOradosHoje: Boolean,
+    compactMode: Boolean,
     onEvent: (event: ListEvent) -> Unit,
 ) {
     Scaffold(
@@ -107,10 +110,9 @@ fun ListContent(
         Column(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding()) // Topo do Scaffold
-                .fillMaxSize()
+                .padding(16.dp)
         ) {
             Text(
-                modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                 text = "Pedidos de Oração",
                 style = MaterialTheme.typography.titleLarge
             )
@@ -120,8 +122,9 @@ fun ListContent(
             Row {
                 TextButton(onClick = {
                     onEvent(ListEvent.ToggleShowPedidosOradosHoje)
-                }) {
-                    Text(text = if (showPedidosOradosHoje) "Esconder pedidos orados hoje" else "Mostrar pedidos orados hoje")
+                                     }) {
+                    //Text(text = if (showPedidosOradosHoje) "Esconder pedidos orados hoje" else "Mostrar pedidos orados hoje")
+                    Text(text = "Orados Hoje")
                 }
 
                 Switch(
@@ -130,16 +133,29 @@ fun ListContent(
                         onEvent(ListEvent.ToggleShowPedidosOradosHoje)
                     }
                 )
+
+                TextButton(onClick = {
+                    onEvent(ListEvent.ToggleCompactMode)
+                }) {
+                    Text(text = "Modo Compacto")
+                }
+
+                Switch(
+                    checked = compactMode,
+                    onCheckedChange = {
+                        onEvent(ListEvent.ToggleCompactMode)
+                    }
+                )
             }
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp)
+                modifier = Modifier.fillMaxSize()
             ) {
                 itemsIndexed(pedidos) { index, item ->
                     PedidoItem(
                         pedido = item.pedido,
                         ultimaOracao = item.ultimaOracao,
+                        compactMode = compactMode,
                         onPrayClick = {
                             onEvent(ListEvent.Pray(item.pedido.id))
                         },
@@ -172,6 +188,7 @@ private fun ListContentPreview() {
                 pedidoComUltimaOracao3
             ),
             showPedidosOradosHoje = false,
+            compactMode = false,
             onEvent = {}
         )
     }
