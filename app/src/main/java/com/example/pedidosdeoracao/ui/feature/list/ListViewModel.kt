@@ -68,9 +68,6 @@ class ListViewModel(
 
     fun onEvent(event: ListEvent) {
         when (event) {
-            is ListEvent.Delete -> {
-                delete(event.id)
-            }
             is ListEvent.ArchiveChanged -> {
                 archiveChanged(event.id, event.isArchived)
             }
@@ -97,13 +94,6 @@ class ListViewModel(
                 toggleCompactMode()
             }
         }
-    }
-
-    private fun delete(id: Long) {
-        viewModelScope.launch {
-            pedidoRepository.delete(id)
-        }
-
     }
 
     private fun archiveChanged(id: Long, isArchived: Boolean) {

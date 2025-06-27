@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pedidosdeoracao.R
 import com.example.pedidosdeoracao.domain.Pedido
-import com.example.pedidosdeoracao.domain.pedido1
 import com.example.pedidosdeoracao.domain.pedido2
 import com.example.pedidosdeoracao.ui.theme.PedidosDeOracaoTheme
 import java.time.LocalDateTime
@@ -33,13 +27,12 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun PedidoItem(
+    modifier: Modifier = Modifier,
     pedido: Pedido,
     ultimaOracao: LocalDateTime?,
     compactMode: Boolean = false,
     onPrayClick: () -> Unit,
-    onItemClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onItemClick: () -> Unit
 ) {
     Surface(
         onClick = onItemClick,
@@ -112,8 +105,7 @@ private fun PedidoItemPreview() {
         ),
             ultimaOracao = LocalDateTime.now(),
             onPrayClick = {},
-            onItemClick = {},
-            onDeleteClick = {}
+            onItemClick = {}
         )
     }
 }
@@ -125,8 +117,7 @@ private fun PedidoItemNeverPrayedPreview() {
         PedidoItem(pedido = pedido2,
             ultimaOracao = null,
             onPrayClick = {},
-            onItemClick = {},
-            onDeleteClick = {}
+            onItemClick = {}
         )
     }
 }
@@ -144,8 +135,7 @@ private fun PedidoItemOnlyTitlePreview() {
         ),
             ultimaOracao = null,
             onPrayClick = {},
-            onItemClick = {},
-            onDeleteClick = {}
+            onItemClick = {}
         )
     }
 }
@@ -158,8 +148,7 @@ private fun PedidoItemCompactModePreview() {
             ultimaOracao = null,
             compactMode = true,
             onPrayClick = {},
-            onItemClick = {},
-            onDeleteClick = {}
+            onItemClick = {}
         )
     }
 }

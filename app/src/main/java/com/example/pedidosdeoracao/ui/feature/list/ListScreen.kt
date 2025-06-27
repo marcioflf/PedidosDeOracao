@@ -2,7 +2,6 @@ package com.example.pedidosdeoracao.ui.feature.list
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,13 +28,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pedidosdeoracao.data.OracaoRepository
 import com.example.pedidosdeoracao.data.OracaoRepositoryImpl
 import com.example.pedidosdeoracao.data.PedidoDatabaseProvider
 import com.example.pedidosdeoracao.data.PedidoRepositoryImpl
-import com.example.pedidosdeoracao.domain.Pedido
-import com.example.pedidosdeoracao.domain.pedido1
-import com.example.pedidosdeoracao.domain.pedido2
 import com.example.pedidosdeoracao.navigation.AddEditRoute
 import com.example.pedidosdeoracao.navigation.DetailsRoute
 import com.example.pedidosdeoracao.ui.UiEvent
@@ -174,9 +169,6 @@ fun ListContent(
                         },
                         onItemClick = {
                             onEvent(ListEvent.Details(item.pedido.id))
-                        },
-                        onDeleteClick = {
-                            onEvent(ListEvent.Delete(item.pedido.id))
                         }
                     )
 

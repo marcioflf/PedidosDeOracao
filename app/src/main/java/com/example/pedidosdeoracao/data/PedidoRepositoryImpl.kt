@@ -48,9 +48,7 @@ class PedidoRepositoryImpl(
     }
 
     override suspend fun getBy(id: Long): Pedido? {
-        return dao.getBy(id)?.let { entity ->
-            entity.toDomain()
-        }
+        return dao.getBy(id)?.toDomain()
     }
 
     private fun PedidoEntity.toDomain(): Pedido {

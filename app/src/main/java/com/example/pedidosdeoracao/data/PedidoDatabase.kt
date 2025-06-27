@@ -27,7 +27,7 @@ object PedidoDatabaseProvider {
                 context.applicationContext,
                 PedidoDatabase::class.java,
                 "pedidos-de-oracao-app"
-            ).fallbackToDestructiveMigration().build()
+            ).build()
             INSTANCE = instance
             instance
         }
