@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pedidosdeoracao.data.OracaoRepository
 import com.example.pedidosdeoracao.data.PedidoRepository
 import com.example.pedidosdeoracao.navigation.AddEditRoute
+import com.example.pedidosdeoracao.navigation.DetailsRoute
 import com.example.pedidosdeoracao.ui.UiEvent
 import com.example.pedidosdeoracao.ui.UiEvent.*
 import kotlinx.coroutines.channels.Channel
@@ -80,6 +81,12 @@ class ListViewModel(
             is ListEvent.ToggleShowPedidosOradosHoje -> {
                 toggleShowPedidosOradosHoje()
             }
+
+            is ListEvent.Details -> {
+                viewModelScope.launch {
+                    _uiEvent.send(Navigate(DetailsRoute(event.id)))
+                }
+            }
         }
     }
 
@@ -100,6 +107,5 @@ class ListViewModel(
         viewModelScope.launch {
             oracaoRepository.insert(id)
         }
-
     }
 }

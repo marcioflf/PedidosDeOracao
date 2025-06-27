@@ -60,8 +60,7 @@ fun PedidoItem(
             IconButton(onClick = onPrayClick) {
                 Icon(
                     painter = painterResource(id = R.drawable.pray),
-                    contentDescription = "Pray",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = "Pray"
                 )
             }
 

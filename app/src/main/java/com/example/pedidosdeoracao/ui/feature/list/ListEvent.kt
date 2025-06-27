@@ -6,4 +6,5 @@ sealed interface ListEvent {
     data class AddEdit(val id: Long?) : ListEvent
     data class Pray(val id: Long) : ListEvent
     data object ToggleShowPedidosOradosHoje : ListEvent
+    data class Details(val id: Long) : ListEvent
 }

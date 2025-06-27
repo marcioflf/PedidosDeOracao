@@ -35,6 +35,7 @@ import com.example.pedidosdeoracao.domain.Pedido
 import com.example.pedidosdeoracao.domain.pedido1
 import com.example.pedidosdeoracao.domain.pedido2
 import com.example.pedidosdeoracao.navigation.AddEditRoute
+import com.example.pedidosdeoracao.navigation.DetailsRoute
 import com.example.pedidosdeoracao.ui.UiEvent
 import com.example.pedidosdeoracao.ui.components.PedidoItem
 import com.example.pedidosdeoracao.ui.theme.PedidosDeOracaoTheme
@@ -42,6 +43,7 @@ import com.example.pedidosdeoracao.ui.theme.PedidosDeOracaoTheme
 @Composable
 fun ListScreen(
     navigateToAddEditScreen: (id: Long?) -> Unit,
+    navigateToDetailsScreen: (id: Long) -> Unit
 ) {
     val context = LocalContext.current.applicationContext
     val database = PedidoDatabaseProvider.provide(context)
@@ -68,6 +70,9 @@ fun ListScreen(
                     when(uiEvent.route) {
                         is AddEditRoute -> {
                             navigateToAddEditScreen(uiEvent.route.id)
+                        }
+                        is DetailsRoute -> {
+                            navigateToDetailsScreen(uiEvent.route.id)
                         }
                         else -> {}
                     }
@@ -139,7 +144,7 @@ fun ListContent(
                             onEvent(ListEvent.Pray(item.pedido.id))
                         },
                         onItemClick = {
-                            onEvent(ListEvent.AddEdit(item.pedido.id))
+                            onEvent(ListEvent.Details(item.pedido.id))
                         },
                         onDeleteClick = {
                             onEvent(ListEvent.Delete(item.pedido.id))
