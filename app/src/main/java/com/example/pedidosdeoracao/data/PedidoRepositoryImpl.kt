@@ -9,21 +9,20 @@ class PedidoRepositoryImpl(
     private val dao: PedidoDao
 ) : PedidoRepository {
         override suspend fun insert(title: String, description: String?, id: Long?) {
-            val entity = id?.let {
-                dao.getBy(it)?.copy(
-                    title = title,
-                    description = description
-                )
-            } ?: PedidoEntity(
+            val existing = id?.let { dao.getBy(it) }
+            val entity = existing?.copy(
+                title = title,
+                description = description
+            ) ?: PedidoEntity(
                 title = title,
                 description = description,
                 creationDate = LocalDateTime.now(),
                 isArchived = false
             )
 
-            id?.let {
+            if (existing != null) {
                 dao.update(entity)
-            } ?: run {
+            } else {
                 dao.insert(entity)
             }
         }
