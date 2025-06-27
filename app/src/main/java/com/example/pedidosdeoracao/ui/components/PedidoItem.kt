@@ -46,7 +46,7 @@ fun PedidoItem(
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(if(!compactMode) 16.dp else 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onPrayClick) {
@@ -64,18 +64,19 @@ fun PedidoItem(
             ) {
                 Text(
                     text = pedido.title,
-                    style = MaterialTheme.typography.titleLarge
+                    style = if(!compactMode) MaterialTheme.typography.titleLarge
+                    else MaterialTheme.typography.titleMedium
                 )
 
-                if(!compactMode) {
-                    ultimaOracao?.let {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Última oração: ${it.format(dateFormatter)}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
+                ultimaOracao?.let {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Última oração: ${it.format(dateFormatter)}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
 
+                if(!compactMode) {
                     pedido.description?.let {
                         Spacer(modifier = Modifier.width(8.dp))
 
@@ -90,7 +91,7 @@ fun PedidoItem(
     }
 }
 
-private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 
 @Preview
 @Composable
@@ -145,7 +146,7 @@ private fun PedidoItemOnlyTitlePreview() {
 private fun PedidoItemCompactModePreview() {
     PedidosDeOracaoTheme {
         PedidoItem(pedido = pedido2,
-            ultimaOracao = null,
+            ultimaOracao = LocalDateTime.now(),
             compactMode = true,
             onPrayClick = {},
             onItemClick = {}

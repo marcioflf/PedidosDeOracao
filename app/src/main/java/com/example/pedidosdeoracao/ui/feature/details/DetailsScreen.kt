@@ -64,10 +64,6 @@ fun DetailsScreen(
         )
     }
 
-    //val snackbarHostState = remember {
-    //    SnackbarHostState()
-    //}
-
     val pedidoState = viewModel.pedido.collectAsState()
     val oracoes = viewModel.oracoes.collectAsState()
 
@@ -184,7 +180,7 @@ fun DetailsContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Data de criação: ${pedido.creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}",
+                    text = "Data de criação: ${pedido.creationDate.format(dateFormatter)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -217,7 +213,7 @@ fun DetailsContent(
             } else {
                 items(oracoes) { oracao ->
                     Text(
-                        text = oracao.dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                        text = oracao.dataHora.format(dateFormatter),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -226,6 +222,8 @@ fun DetailsContent(
         }
     }
 }
+
+private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 
 @Preview
 @Composable
