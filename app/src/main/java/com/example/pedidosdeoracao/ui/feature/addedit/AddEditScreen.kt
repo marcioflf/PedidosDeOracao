@@ -74,6 +74,7 @@ fun AddEditScreen(
     AddEditContent(
         title = title,
         description = description,
+        isEditing = id != null,
         snackbarHostState = snackbarHostState,
         onEvent = viewModel::onEvent
     )
@@ -83,6 +84,7 @@ fun AddEditScreen(
 fun AddEditContent(
     title: String,
     description: String?,
+    isEditing: Boolean,
     snackbarHostState: SnackbarHostState,
     onEvent: (event: AddEditEvent) -> Unit
 ) {
@@ -105,17 +107,10 @@ fun AddEditContent(
                 .padding(top = it.calculateTopPadding())
                 .padding(16.dp)
         ) {
-            if (title.isBlank()) {
-                Text(
-                    text = "Adicionar Pedido de Oração",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            } else {
-                Text(
-                    text = "Editar Pedido de Oração",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
+            Text(
+                text = if (isEditing) "Editar Pedido de Oração" else "Adicionar Pedido de Oração",
+                style = MaterialTheme.typography.titleLarge
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -153,6 +148,21 @@ private fun AddEditPreview() {
         AddEditContent(
             title = "",
             description = null,
+            isEditing = false,
+            snackbarHostState = SnackbarHostState(),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AddEditEditingModePreview() {
+    PedidosDeOracaoTheme {
+        AddEditContent(
+            title = "",
+            description = null,
+            isEditing = true,
             snackbarHostState = SnackbarHostState(),
             onEvent = {}
         )
