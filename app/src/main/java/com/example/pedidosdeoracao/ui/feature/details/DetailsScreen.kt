@@ -85,6 +85,7 @@ fun DetailsScreen(
     val oracoesOrdenadas = oracoes.value.sortedByDescending { it.dataHora }
 
     LaunchedEffect(Unit) {
+        viewModel.refreshPedido()
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
                 is UiEvent.ShowSnackbar -> {
@@ -156,19 +157,20 @@ fun DetailsContent(
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                if (!pedido.description.isNullOrBlank()) {
-                    Text(
-                        text = pedido.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
 
                 Text(
                     text = "Data de criação: ${pedido.creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
+
+                if (!pedido.description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = pedido.description,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 

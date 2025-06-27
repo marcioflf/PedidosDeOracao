@@ -71,4 +71,10 @@ class DetailsViewModel(
             _uiEvent.send(UiEvent.ShowSnackbar("Pedido deletado"))
         }
     }
+
+    fun refreshPedido() {
+        viewModelScope.launch {
+            _pedido.value = pedidoRepository.getBy(pedidoId)
+        }
+    }
 }
